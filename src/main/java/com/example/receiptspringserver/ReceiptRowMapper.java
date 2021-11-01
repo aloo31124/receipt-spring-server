@@ -1,5 +1,6 @@
 package com.example.receiptspringserver;
 
+import com.example.receiptspringserver.model.Receipt;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package com.example.receiptspringserver;
+package com.example.receiptspringserver.model;
 
 public class Receipt {
     Integer receiptId;
