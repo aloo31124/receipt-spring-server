@@ -6,15 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Component
-public class ReceiptDaoImpl implements ReceiptDao{
+public class ReceiptDaoImpl extends BaseDaoImpl implements ReceiptDao{
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+
+    public List<Receipt> findReceiptAll() {
+        return this.findAll("Receipt" , new ReceiptRowMapper());
+    }
 
     @Override
     public Receipt findReceiptById(Integer receiptId) {
@@ -23,14 +29,6 @@ public class ReceiptDaoImpl implements ReceiptDao{
         map.put("receiptId",receiptId);
         List<Receipt> result = namedParameterJdbcTemplate.query(sql,map, new ReceiptRowMapper());
         return result.get(0);
-    }
-
-    @Override
-    public List<Receipt> findReceiptAll() {
-        String sql = " SELECT receiptId,receiptName FROM Receipt ";
-        Map<String,Object> map = new HashMap<>();
-        List<Receipt> result = namedParameterJdbcTemplate.query(sql,map, new ReceiptRowMapper());
-        return result;
     }
 
     @Override
