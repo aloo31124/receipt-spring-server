@@ -1,12 +1,13 @@
 package com.example.receiptspringserver.dao;
 
 import com.example.receiptspringserver.model.Receipt;
-import com.example.receiptspringserver.ReceiptRowMapper;
+import com.example.receiptspringserver.model.ReceiptModleManager;
+import com.example.receiptspringserver.model.ReceiptRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,41 +19,28 @@ public class ReceiptDaoImpl extends BaseDaoImpl implements ReceiptDao{
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 
+
     public List<Receipt> findReceiptAll() {
-        return this.findAll("Receipt" , new ReceiptRowMapper());
+        return this.findAll(new ReceiptModleManager());
     }
 
     @Override
     public Receipt findReceiptById(Integer receiptId) {
-        String sql = " SELECT receiptId,receiptName FROM Receipt WHERE receiptId= :receiptId ";
-        Map<String,Object> map = new HashMap<>();
-        map.put("receiptId",receiptId);
-        List<Receipt> result = namedParameterJdbcTemplate.query(sql,map, new ReceiptRowMapper());
-        return result.get(0);
+        return this.findByColumn("receiptId" , receiptId,new ReceiptModleManager()).get(0);
     }
 
     @Override
     public int insertReceipt(Receipt receipt) {
-        String sql = " INSERT Receipt ( receiptName ) VALUE ( :receiptName )";
-        Map<String, Object> map = new HashMap<>();
-        map.put("receiptName", receipt.getReceiptName());
-        return namedParameterJdbcTemplate.update(sql, map);
+        return this.insertOne(receipt, new ReceiptModleManager());
     }
 
     @Override
     public int updateRecieptById(Receipt receipt,Integer receiptId) {
-        String sql = " UPDATE Receipt SET receiptName = :receiptName  WHERE receiptId= :receiptId ";
-        Map<String,Object> map = new HashMap<>();
-        map.put("receiptName", receipt.getReceiptName());
-        map.put("receiptId", receiptId);
-        return namedParameterJdbcTemplate.update(sql,map);
+        return this.updateByColumn(receipt, receiptId, new ReceiptModleManager());
     }
 
     @Override
     public int deleteReceiptById(Integer receiptId) {
-        String sql = " DELETE FROM Receipt WHERE receiptId= :receiptId ";
-        Map<String,Object> map = new HashMap<>();
-        map.put("receiptId", receiptId);
-        return namedParameterJdbcTemplate.update(sql,map);
+        return this.deleteByColumn(receiptId);
     }
 }

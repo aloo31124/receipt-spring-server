@@ -1,4 +1,4 @@
-package com.example.receiptspringserver;
+package com.example.receiptspringserver.model;
 
 import com.example.receiptspringserver.model.Receipt;
 import org.springframework.jdbc.core.RowMapper;
